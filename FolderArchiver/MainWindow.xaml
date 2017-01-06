@@ -5,7 +5,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls" Icon="b.ico"
                       mc:Ignorable="d" ResizeMode="CanMinimize" GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="FolderArchiver" Height="200" Width="500" TitleCaps="False">
+                      Title="FolderArchiver" Height="250" Width="500" TitleCharacterCasing="Normal">
     <!--  RightWindowCommands  -->
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
@@ -24,6 +24,10 @@
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
+    <!-- TaskbarItemInfo -->
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
     <!-- Grid -->
     <Grid>
         <!-- Browse -->
@@ -61,43 +65,42 @@
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
             <!--  Settings Flyout  -->
-            <controls:Flyout Name="SettingsFlyout" Width="400" AnimateOnPositionChange="True" AnimateOpacity="True"
-                             Header="settings" Position="Right" Theme="Accent">
-                <StackPanel Orientation="Horizontal">
-                    <!-- Left -->
-                    <StackPanel Orientation="Vertical">
-                        <!-- Theme -->
-                        <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                            <Label Width="50" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                   Content="Theme:" />
-                            <RadioButton Name="Dark" Margin="10,0,5,0" Checked="Theme" Content="Dark" />
-                            <RadioButton Name="Light" Margin="10,0,5,0" Checked="Theme" Content="Light"
-                                         IsChecked="True" />
-                        </StackPanel>
-                        <!-- Accent -->
-                        <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                            <Label Width="50" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                   Content="Accent:" />
-                            <ComboBox Name="Accent" Width="165" Margin="10,5,0,0" HorizontalAlignment="Left"
-                                      VerticalAlignment="Top" SelectionChanged="AccentOnSelectionChanged" />
-                        </StackPanel>
+            <controls:Flyout Name="SettingsFlyout" Width="250" AnimateOnPositionChange="True" AnimateOpacity="True" Header="settings" Position="Right" Theme="Accent">
+                <StackPanel>
+                    <!-- Theme -->
+                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                        <Label Width="50" Margin="0,5,0,0" HorizontalAlignment="Left"
+                               VerticalAlignment="Top" Content="Theme" />
+                        <controls:ToggleSwitch Name="ThemeSwitch" Margin="10,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" IsCheckedChanged="Theme"
+                                               OnSwitchBrush="{DynamicResource AccentColorBrush}" OnLabel="Dark"
+                                               OffSwitchBrush="{DynamicResource AccentColorBrush}" OffLabel="Light" />
                     </StackPanel>
-                    <!-- Right -->
-                    <StackPanel>
-                        <!-- Save Style -->
-                        <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                            <Button Name="SaveStyle" Width="145" Margin="0,40,0,0" Click="SaveStyleClick">
-                                <StackPanel Orientation="Horizontal">
-                                    <Rectangle Width="16" Height="16"
-                                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                                        <Rectangle.OpacityMask>
-                                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
-                                        </Rectangle.OpacityMask>
-                                    </Rectangle>
-                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="save style" />
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
+                    <!-- Accent -->
+                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                        <Label Width="50" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Accent:" />
+                        <ComboBox Name="Accent" Width="165" Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="AccentOnSelectionChanged" />
+                    </StackPanel>
+                    <!-- Save Style -->
+                    <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                        <Button Name="SaveStyle" Width="165" Margin="60,5,0,0" Click="SaveStyleClick">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="16" Height="16" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="save style" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <!-- Horizontal Line -->
+                    <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                        <Rectangle Width="220" VerticalAlignment="Stretch" Stroke="{DynamicResource AccentColorBrush}" />
+                    </StackPanel>
+                    <!-- Build / Linker Time -->
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="50" Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Build" />
+                        <Label Width="310" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="LinkerTime" />
                     </StackPanel>
                 </StackPanel>
             </controls:Flyout>

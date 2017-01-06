@@ -1,7 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Shell;
+using EvilBaschdi.Core.Application;
 using EvilBaschdi.Core.Browsers;
 using EvilBaschdi.Core.DirectoryExtensions;
 using EvilBaschdi.Core.Threading;
@@ -14,6 +21,7 @@ namespace FolderArchiver
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : MetroWindow
     {
         private readonly IMetroStyle _style;
@@ -23,11 +31,15 @@ namespace FolderArchiver
 
         public MainWindow()
         {
-            _appSettings = new AppSettings();
-            var coreSettings = new CoreSettings();
             InitializeComponent();
-            _style = new MetroStyle(this, Accent, Dark, Light, coreSettings);
-            _style.Load();
+            var coreSettings = new CoreSettings(Properties.Settings.Default);
+            var themeManagerHelper = new ThemeManagerHelper();
+            _style = new MetroStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
+            _style.Load(true);
+
+            _appSettings = new AppSettings();
+            var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
+            LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
             Load();
         }
 
@@ -50,7 +62,26 @@ namespace FolderArchiver
             }
         }
 
-        private void ArchiveFoldersOnClick(object sender, RoutedEventArgs e)
+        private async void ArchiveFoldersOnClick(object sender, RoutedEventArgs e)
+        {
+            await RunArchiveFoldersAsync();
+        }
+
+        private async Task RunArchiveFoldersAsync()
+        {
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
+            Cursor = Cursors.Wait;
+
+            var task = Task<string>.Factory.StartNew(ArchiveFolders);
+            await task;
+
+            ArchiveFolderContent.Text = task.Result;
+
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+            Cursor = Cursors.Arrow;
+        }
+
+        private string ArchiveFolders()
         {
             var multiThreadingHelper = new MultiThreadingHelper();
             var filePath = new FilePath(multiThreadingHelper);
@@ -86,7 +117,7 @@ namespace FolderArchiver
                 ? "files were"
                 : "file was";
 
-            ArchiveFolderContent.Text = counter != 0
+            return counter != 0
                 ? $"{counter} {pluralHelper} archived."
                 : "Nothing has changed.";
         }
@@ -148,13 +179,21 @@ namespace FolderArchiver
             _style.SaveStyle();
         }
 
-        private void Theme(object sender, RoutedEventArgs e)
+        private void Theme(object sender, EventArgs e)
         {
             if (_overrideProtection == 0)
             {
                 return;
             }
-            _style.SetTheme(sender, e);
+            var routedEventArgs = e as RoutedEventArgs;
+            if (routedEventArgs != null)
+            {
+                _style.SetTheme(sender, routedEventArgs);
+            }
+            else
+            {
+                _style.SetTheme(sender);
+            }
         }
 
         private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
