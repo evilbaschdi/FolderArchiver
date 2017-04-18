@@ -133,7 +133,7 @@ namespace FolderArchiver
             Load();
         }
 
-        #region Flyout
+        #region Fly-out
 
         private void ToggleSettingsFlyoutClick(object sender, RoutedEventArgs e)
         {
@@ -166,7 +166,7 @@ namespace FolderArchiver
             }
         }
 
-        #endregion Flyout
+        #endregion Fly-out
 
         #region MetroStyle
 

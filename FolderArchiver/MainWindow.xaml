@@ -61,10 +61,10 @@
             </StackPanel>
         </Button>
     </Grid>
-    <!--  Flyouts  -->
+    <!--  Fly-outs  -->
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
-            <!--  Settings Flyout  -->
+            <!--  Settings Fly-out  -->
             <controls:Flyout Name="SettingsFlyout" Width="250" AnimateOnPositionChange="True" AnimateOpacity="True" Header="settings" Position="Right" Theme="Accent">
                 <StackPanel>
                     <!-- Theme -->
