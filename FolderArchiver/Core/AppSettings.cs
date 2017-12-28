@@ -4,12 +4,9 @@
     {
         public string InitialDirectory
         {
-            get
-            {
-                return string.IsNullOrWhiteSpace(Properties.Settings.Default.InitialDirectory)
-                    ? ""
-                    : Properties.Settings.Default.InitialDirectory;
-            }
+            get => string.IsNullOrWhiteSpace(Properties.Settings.Default.InitialDirectory)
+                ? ""
+                : Properties.Settings.Default.InitialDirectory;
             set
             {
                 Properties.Settings.Default.InitialDirectory = value;
