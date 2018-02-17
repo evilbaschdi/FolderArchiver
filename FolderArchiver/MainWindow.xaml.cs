@@ -8,12 +8,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shell;
-using EvilBaschdi.Core.Application;
-using EvilBaschdi.Core.Browsers;
-using EvilBaschdi.Core.DirectoryExtensions;
-using EvilBaschdi.Core.Threading;
-using EvilBaschdi.Core.Wpf;
+using EvilBaschdi.Core.Extensions;
+using EvilBaschdi.Core.Internal;
+using EvilBaschdi.Core.Model;
+using EvilBaschdi.CoreExtended.AppHelpers;
+using EvilBaschdi.CoreExtended.Browsers;
+using EvilBaschdi.CoreExtended.Metro;
 using FolderArchiver.Core;
+using FolderArchiver.Properties;
 using MahApps.Metro.Controls;
 
 namespace FolderArchiver
@@ -24,20 +26,23 @@ namespace FolderArchiver
     // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : MetroWindow
     {
-        private readonly IMetroStyle _style;
         private readonly IAppSettings _appSettings;
         private string _initialDirectory;
         private int _overrideProtection;
+        private readonly IApplicationStyle _applicationStyle;
 
+
+        /// <inheritdoc />
         public MainWindow()
         {
             InitializeComponent();
-            var coreSettings = new CoreSettings(Properties.Settings.Default);
-            var themeManagerHelper = new ThemeManagerHelper();
-            _style = new MetroStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
-            _style.Load(true);
+            IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
+            IApplicationStyleSettings applicationStyleSettings = new ApplicationStyleSettings(appSettingsBase);
+            IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
+            _applicationStyle = new ApplicationStyle(this, Accent, ThemeSwitch, applicationStyleSettings, themeManagerHelper);
+            _applicationStyle.Load(true);
 
-            _appSettings = new AppSettings();
+            _appSettings = new AppSettings(appSettingsBase);
             var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
             Load();
@@ -83,9 +88,9 @@ namespace FolderArchiver
 
         private string ArchiveFolders()
         {
-            var multiThreadingHelper = new MultiThreadingHelper();
-            var filePath = new FilePath(multiThreadingHelper);
-            var files = filePath.GetFileList(_initialDirectory);
+            var multiThreadingHelper = new MultiThreading();
+            var filePath = new FileListFromPath(multiThreadingHelper);
+            var files = filePath.ValueFor(_initialDirectory, default(FileListFromPathFilter));
 
             var counter = 0;
 
@@ -176,7 +181,8 @@ namespace FolderArchiver
             {
                 return;
             }
-            _style.SaveStyle();
+
+            _applicationStyle.SaveStyle();
         }
 
         private void Theme(object sender, EventArgs e)
@@ -185,15 +191,8 @@ namespace FolderArchiver
             {
                 return;
             }
-            var routedEventArgs = e as RoutedEventArgs;
-            if (routedEventArgs != null)
-            {
-                _style.SetTheme(sender, routedEventArgs);
-            }
-            else
-            {
-                _style.SetTheme(sender);
-            }
+
+            _applicationStyle.SetTheme(sender);
         }
 
         private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -202,7 +201,8 @@ namespace FolderArchiver
             {
                 return;
             }
-            _style.SetAccent(sender, e);
+
+            _applicationStyle.SetAccent(sender, e);
         }
 
         #endregion MetroStyle
