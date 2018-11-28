@@ -12,7 +12,7 @@
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <!--  Settings  -->
-            <Button Click="ToggleSettingsFlyoutClick">
+            <Button Click="ToggleSettingsFlyOutClick">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="Settings" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="settings" />
@@ -20,7 +20,7 @@
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
-    <!-- TaskbarItemInfo -->
+    <!-- TaskBarItemInfo -->
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo />
     </Window.TaskbarItemInfo>
@@ -31,12 +31,13 @@
                Content="Path" />
         <TextBox x:Name="InitialDirectory" Height="30" Margin="50,10,115,0" VerticalAlignment="Top"
                  LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />
+        <!-- ReSharper disable once UnusedMember.Global -->
         <Button Name="Browse" Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                 Click="BrowseClick">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="FolderOutline" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="reload" />
+                    <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="browse" />
                 </StackPanel>
             </StackPanel>
         </Button>
@@ -53,7 +54,8 @@
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
             <!--  Settings Fly-out  -->
-            <controls:Flyout Name="SettingsFlyout" Width="250" AnimateOnPositionChange="True" AnimateOpacity="True" Header="settings" Position="Right" Theme="Accent">
+            <!-- ReSharper disable once UnusedMember.Global -->
+            <controls:Flyout Name="SettingsFlyOut" Width="250" AnimateOnPositionChange="True" AnimateOpacity="True" Header="settings" Position="Right" Theme="Accent">
                 <StackPanel>
                     <!-- Theme -->
                     <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
@@ -70,6 +72,7 @@
                     </StackPanel>
                     <!-- Save Style -->
                     <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                        <!-- ReSharper disable once UnusedMember.Global -->
                         <Button Name="SaveStyle" Width="165" Margin="60,5,0,0" Click="SaveStyleClick">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconMaterial Kind="ContentSaveSettings" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />

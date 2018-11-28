@@ -26,10 +26,10 @@ namespace FolderArchiver
     // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : MetroWindow
     {
+        private readonly IApplicationStyle _applicationStyle;
         private readonly IAppSettings _appSettings;
         private string _initialDirectory;
         private int _overrideProtection;
-        private readonly IApplicationStyle _applicationStyle;
 
 
         /// <inheritdoc />
@@ -60,11 +60,13 @@ namespace FolderArchiver
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(InitialDirectory.Text))
+            if (!Directory.Exists(InitialDirectory.Text))
             {
-                _appSettings.InitialDirectory = InitialDirectory.Text;
-                Load();
+                return;
             }
+
+            _appSettings.InitialDirectory = InitialDirectory.Text;
+            Load();
         }
 
         private async void ArchiveFoldersOnClick(object sender, RoutedEventArgs e)
@@ -90,32 +92,36 @@ namespace FolderArchiver
         {
             var multiThreadingHelper = new MultiThreading();
             var filePath = new FileListFromPath(multiThreadingHelper);
-            var files = filePath.ValueFor(_initialDirectory, default(FileListFromPathFilter));
+            var files = filePath.ValueFor(_initialDirectory, new FileListFromPathFilter());
 
             var counter = 0;
 
             foreach (var path in files)
             {
                 var fileName = Path.GetFileName(path);
-                if (!string.IsNullOrWhiteSpace(fileName))
+                if (string.IsNullOrWhiteSpace(fileName))
                 {
-                    var createTime = File.GetCreationTime(path);
-                    var directory = path.Replace(fileName, string.Empty);
-                    var archiveTime = $@"{createTime.Year}\{createTime.Month.ToString().PadLeft(2, '0')}";
-                    var archiveDirectory = $@"{directory}\{archiveTime}";
-                    var archiveFilename = $@"{archiveDirectory}\{fileName}";
-                    //debug
-                    if (!path.Contains(archiveTime))
-                    {
-                        if (!Directory.Exists(archiveDirectory))
-                        {
-                            Directory.CreateDirectory(archiveDirectory);
-                        }
-
-                        File.Move(path, archiveFilename);
-                        counter++;
-                    }
+                    continue;
                 }
+
+                var createTime = File.GetCreationTime(path);
+                var directory = path.Replace(fileName, string.Empty);
+                var archiveTime = $@"{createTime.Year}\{createTime.Month.ToString().PadLeft(2, '0')}";
+                var archiveDirectory = $@"{directory}\{archiveTime}";
+                var archiveFilename = $@"{archiveDirectory}\{fileName}";
+                //debug
+                if (path.Contains(archiveTime))
+                {
+                    continue;
+                }
+
+                if (!Directory.Exists(archiveDirectory))
+                {
+                    Directory.CreateDirectory(archiveDirectory);
+                }
+
+                File.Move(path, archiveFilename);
+                counter++;
             }
 
             var pluralHelper = counter != 1
@@ -140,34 +146,34 @@ namespace FolderArchiver
 
         #region Fly-out
 
-        private void ToggleSettingsFlyoutClick(object sender, RoutedEventArgs e)
+        private void ToggleSettingsFlyOutClick(object sender, RoutedEventArgs e)
         {
-            ToggleFlyout(0);
+            ToggleFlyOut(0);
         }
 
-        private void ToggleFlyout(int index, bool stayOpen = false)
+        private void ToggleFlyOut(int index, bool stayOpen = false)
         {
-            var activeFlyout = (Flyout) Flyouts.Items[index];
-            if (activeFlyout == null)
+            var activeFlyOut = (Flyout) Flyouts.Items[index];
+            if (activeFlyOut == null)
             {
                 return;
             }
 
             foreach (
-                var nonactiveFlyout in
+                var nonactiveFlyOut in
                 Flyouts.Items.Cast<Flyout>()
-                       .Where(nonactiveFlyout => nonactiveFlyout.IsOpen && nonactiveFlyout.Name != activeFlyout.Name))
+                       .Where(nonactiveFlyOut => nonactiveFlyOut.IsOpen && nonactiveFlyOut.Name != activeFlyOut.Name))
             {
-                nonactiveFlyout.IsOpen = false;
+                nonactiveFlyOut.IsOpen = false;
             }
 
-            if (activeFlyout.IsOpen && stayOpen)
+            if (activeFlyOut.IsOpen && stayOpen)
             {
-                activeFlyout.IsOpen = true;
+                activeFlyOut.IsOpen = true;
             }
             else
             {
-                activeFlyout.IsOpen = !activeFlyout.IsOpen;
+                activeFlyOut.IsOpen = !activeFlyOut.IsOpen;
             }
         }
 
