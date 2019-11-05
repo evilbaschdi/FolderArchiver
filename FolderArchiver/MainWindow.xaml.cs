@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shell;
-using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Core.Model;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
 using EvilBaschdi.CoreExtended.Metro;
+using EvilBaschdi.CoreExtended.Mvvm;
+using EvilBaschdi.CoreExtended.Mvvm.View;
+using EvilBaschdi.CoreExtended.Mvvm.ViewModel;
 using FolderArchiver.Core;
 using FolderArchiver.Properties;
 using MahApps.Metro.Controls;
@@ -26,10 +24,9 @@ namespace FolderArchiver
     // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : MetroWindow
     {
-        private readonly IApplicationStyle _applicationStyle;
         private readonly IAppSettings _appSettings;
+        private readonly IThemeManagerHelper _themeManagerHelper;
         private string _initialDirectory;
-        private int _overrideProtection;
 
 
         /// <inheritdoc />
@@ -37,14 +34,12 @@ namespace FolderArchiver
         {
             InitializeComponent();
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            IApplicationStyleSettings applicationStyleSettings = new ApplicationStyleSettings(appSettingsBase);
-            IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
-            _applicationStyle = new ApplicationStyle(this, Accent, ThemeSwitch, applicationStyleSettings, themeManagerHelper);
-            _applicationStyle.Load(true);
+            _themeManagerHelper = new ThemeManagerHelper();
+            IApplicationStyle applicationStyle = new ApplicationStyle(_themeManagerHelper);
+            applicationStyle.Load(true);
 
             _appSettings = new AppSettings(appSettingsBase);
-            var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
-            LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
+
             Load();
         }
 
@@ -54,8 +49,6 @@ namespace FolderArchiver
 
             _initialDirectory = _appSettings.InitialDirectory;
             InitialDirectory.Text = _initialDirectory;
-
-            _overrideProtection = 1;
         }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
@@ -144,73 +137,17 @@ namespace FolderArchiver
             Load();
         }
 
-        #region Fly-out
-
-        private void ToggleSettingsFlyOutClick(object sender, RoutedEventArgs e)
+        private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
-            ToggleFlyOut(0);
+            var assembly = typeof(MainWindow).Assembly;
+            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
+
+            var aboutWindow = new AboutWindow
+                              {
+                                  DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper)
+                              };
+
+            aboutWindow.ShowDialog();
         }
-
-        private void ToggleFlyOut(int index, bool stayOpen = false)
-        {
-            var activeFlyOut = (Flyout) Flyouts.Items[index];
-            if (activeFlyOut == null)
-            {
-                return;
-            }
-
-            foreach (
-                var nonactiveFlyOut in
-                Flyouts.Items.Cast<Flyout>()
-                       .Where(nonactiveFlyOut => nonactiveFlyOut.IsOpen && nonactiveFlyOut.Name != activeFlyOut.Name))
-            {
-                nonactiveFlyOut.IsOpen = false;
-            }
-
-            if (activeFlyOut.IsOpen && stayOpen)
-            {
-                activeFlyOut.IsOpen = true;
-            }
-            else
-            {
-                activeFlyOut.IsOpen = !activeFlyOut.IsOpen;
-            }
-        }
-
-        #endregion Fly-out
-
-        #region MetroStyle
-
-        private void SaveStyleClick(object sender, RoutedEventArgs e)
-        {
-            if (_overrideProtection == 0)
-            {
-                return;
-            }
-
-            _applicationStyle.SaveStyle();
-        }
-
-        private void Theme(object sender, EventArgs e)
-        {
-            if (_overrideProtection == 0)
-            {
-                return;
-            }
-
-            _applicationStyle.SetTheme(sender);
-        }
-
-        private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (_overrideProtection == 0)
-            {
-                return;
-            }
-
-            _applicationStyle.SetAccent(sender, e);
-        }
-
-        #endregion MetroStyle
     }
 }
