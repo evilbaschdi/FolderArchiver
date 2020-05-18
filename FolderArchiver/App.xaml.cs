@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using EvilBaschdi.CoreExtended.Metro;
+using ControlzEx.Theming;
 
 namespace FolderArchiver
 {
@@ -13,8 +13,7 @@ namespace FolderArchiver
         /// <inheritdoc />
         protected override void OnStartup(StartupEventArgs e)
         {
-            var themeManagerHelper = new ThemeManagerHelper();
-            themeManagerHelper.RegisterSystemColorTheme();
+            ThemeManager.Current.SyncTheme(ThemeSyncMode.SyncAll);
 
             base.OnStartup(e);
         }

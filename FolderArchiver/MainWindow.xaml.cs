@@ -6,12 +6,10 @@ using System.Windows.Input;
 using System.Windows.Shell;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Core.Model;
+using EvilBaschdi.CoreExtended;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
-using EvilBaschdi.CoreExtended.Metro;
-using EvilBaschdi.CoreExtended.Mvvm;
-using EvilBaschdi.CoreExtended.Mvvm.View;
-using EvilBaschdi.CoreExtended.Mvvm.ViewModel;
+using EvilBaschdi.CoreExtended.Controls.About;
 using FolderArchiver.Core;
 using FolderArchiver.Properties;
 using MahApps.Metro.Controls;
@@ -25,7 +23,7 @@ namespace FolderArchiver
     public partial class MainWindow : MetroWindow
     {
         private readonly IAppSettings _appSettings;
-        private readonly IThemeManagerHelper _themeManagerHelper;
+
         private string _initialDirectory;
 
 
@@ -34,8 +32,8 @@ namespace FolderArchiver
         {
             InitializeComponent();
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            _themeManagerHelper = new ThemeManagerHelper();
-            IApplicationStyle applicationStyle = new ApplicationStyle(_themeManagerHelper);
+
+            IApplicationStyle applicationStyle = new ApplicationStyle();
             applicationStyle.Load(true);
 
             _appSettings = new AppSettings(appSettingsBase);
@@ -83,8 +81,7 @@ namespace FolderArchiver
 
         private string ArchiveFolders()
         {
-            var multiThreadingHelper = new MultiThreading();
-            var filePath = new FileListFromPath(multiThreadingHelper);
+            var filePath = new FileListFromPath();
             var files = filePath.ValueFor(_initialDirectory, new FileListFromPathFilter());
 
             var counter = 0;
@@ -140,11 +137,11 @@ namespace FolderArchiver
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
             var assembly = typeof(MainWindow).Assembly;
-            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
+            IAboutContent aboutWindowContent = new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
 
             var aboutWindow = new AboutWindow
                               {
-                                  DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper)
+                                  DataContext = new AboutViewModel(aboutWindowContent)
                               };
 
             aboutWindow.ShowDialog();
