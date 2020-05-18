@@ -3,18 +3,21 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Shell;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Core.Model;
+using EvilBaschdi.CoreExtended;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
-using EvilBaschdi.CoreExtended.Metro;
-using EvilBaschdi.CoreExtended.Mvvm;
-using EvilBaschdi.CoreExtended.Mvvm.View;
-using EvilBaschdi.CoreExtended.Mvvm.ViewModel;
+using EvilBaschdi.CoreExtended.Controls.About;
 using FolderArchiver.Core;
 using FolderArchiver.Properties;
 using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
+using MahApps.Metro.IconPacks.Converter;
 
 namespace FolderArchiver
 {
@@ -25,7 +28,6 @@ namespace FolderArchiver
     public partial class MainWindow : MetroWindow
     {
         private readonly IAppSettings _appSettings;
-        private readonly IThemeManagerHelper _themeManagerHelper;
         private string _initialDirectory;
 
 
@@ -34,8 +36,7 @@ namespace FolderArchiver
         {
             InitializeComponent();
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            _themeManagerHelper = new ThemeManagerHelper();
-            IApplicationStyle applicationStyle = new ApplicationStyle(_themeManagerHelper);
+            IApplicationStyle applicationStyle = new ApplicationStyle();
             applicationStyle.Load(true);
 
             _appSettings = new AppSettings(appSettingsBase);
@@ -67,6 +68,7 @@ namespace FolderArchiver
             await RunArchiveFoldersAsync();
         }
 
+
         private async Task RunArchiveFoldersAsync()
         {
             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
@@ -83,8 +85,7 @@ namespace FolderArchiver
 
         private string ArchiveFolders()
         {
-            var multiThreadingHelper = new MultiThreading();
-            var filePath = new FileListFromPath(multiThreadingHelper);
+            var filePath = new FileListFromPath();
             var files = filePath.ValueFor(_initialDirectory, new FileListFromPathFilter());
 
             var counter = 0;
@@ -113,7 +114,15 @@ namespace FolderArchiver
                     Directory.CreateDirectory(archiveDirectory);
                 }
 
-                File.Move(path, archiveFilename);
+                try
+                {
+                    File.Move(path, archiveFilename);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+
                 counter++;
             }
 
@@ -137,14 +146,87 @@ namespace FolderArchiver
             Load();
         }
 
+        private void BrowseChildChanged(object sender, EventArgs e)
+        {
+            if (Browse.Child is Button button)
+            {
+                /*
+            
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="FolderOutline" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="browse" />
+                </StackPanel>
+
+
+                ImageSource="{Binding Source={x:Static iconPacks:PackIconMaterialKind.CubeOutline}, Converter={iconPackConverter:PackIconMaterialImageSourceConverter}, ConverterParameter={StaticResource TextBrush}}"
+                        Click="ThumbButtonInfoBrowseClick" />
+            
+                 */
+
+                //xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+
+
+                var packIcon = new PackIconMaterial
+                               {
+                                   Kind = PackIconMaterialKind.CubeOutline
+                               };
+
+                var converter = new PackIconMaterialKindToImageConverter
+                                {
+                                    Brush = (SolidColorBrush) FindResource("MahApps.Brushes.AccentBase")
+                                };
+
+                var binding = new Binding
+                              {
+                                  Source = packIcon,
+                                  Converter = new PackIconMaterialKindToImageConverter()
+                              };
+
+                //binding.ConverterParameter = FindResource("MahApps.Brushes.AccentBase");
+
+
+                var image = new Image();
+                image.SetBinding(Image.SourceProperty,binding );
+                
+
+
+                var textBlock = new TextBlock
+                                {
+                                    Margin = new Windows.UI.Xaml.Thickness(5, 0, 0, 0),
+                                    VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
+                                    Text = "browse"
+                                };
+
+                var stackPanel = new StackPanel
+                                 {
+                                     Orientation = Orientation.Horizontal
+                                 };
+                stackPanel.Children.Add(image);
+                stackPanel.Children.Add(textBlock);
+
+
+                button.Content = stackPanel;
+                button.Click += (s, args) =>
+                                {
+                                    var browser = new ExplorerFolderBrowser
+                                                  {
+                                                      SelectedPath = _initialDirectory
+                                                  };
+                                    browser.ShowDialog();
+                                    _appSettings.InitialDirectory = browser.SelectedPath;
+                                    Load();
+                                };
+            }
+        }
+
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
             var assembly = typeof(MainWindow).Assembly;
-            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
+            IAboutContent aboutWindowContent = new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
 
             var aboutWindow = new AboutWindow
                               {
-                                  DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper)
+                                  DataContext = new AboutViewModel(aboutWindowContent)
                               };
 
             aboutWindow.ShowDialog();

@@ -1,24 +1,26 @@
-﻿<controls:MetroWindow x:Class="FolderArchiver.MainWindow"
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-                      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                      Icon="Resources/b.ico"
-                      mc:Ignorable="d" ResizeMode="CanMinimize" GlowBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                      Title="FolderArchiver" Height="250" Width="500" TitleCharacterCasing="Normal">
+﻿<mahAppsControls:MetroWindow x:Class="FolderArchiver.MainWindow"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:mahAppsControls="http://metro.mahapps.com/winfx/xaml/controls"
+                             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                             xmlns:xamlHost="clr-namespace:Microsoft.Toolkit.Wpf.UI.XamlHost;assembly=Microsoft.Toolkit.Wpf.UI.XamlHost"
+                             xmlns:controls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls"
+                             Icon="Resources/b.ico"
+                             mc:Ignorable="d" ResizeMode="CanMinimize" GlowBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                             Title="FolderArchiver" Height="250" Width="500" TitleCharacterCasing="Normal">
     <!--  RightWindowCommands  -->
-    <controls:MetroWindow.RightWindowCommands>
-        <controls:WindowCommands>
+    <mahAppsControls:MetroWindow.RightWindowCommands>
+        <mahAppsControls:WindowCommands>
             <Button Click="AboutWindowClick">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="Information" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="about" />
                 </StackPanel>
             </Button>
-        </controls:WindowCommands>
-    </controls:MetroWindow.RightWindowCommands>
+        </mahAppsControls:WindowCommands>
+    </mahAppsControls:MetroWindow.RightWindowCommands>
     <!-- TaskBarItemInfo -->
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo />
@@ -31,15 +33,20 @@
         <TextBox x:Name="InitialDirectory" Height="30" Margin="50,10,115,0" VerticalAlignment="Top"
                  LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />
         <!-- ReSharper disable once UnusedMember.Global -->
-        <Button Name="Browse" Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+        <!--<Button Name="Browse2" Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                 Click="BrowseClick">
-            <StackPanel Orientation="Horizontal">
+            
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="FolderOutline" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="browse" />
                 </StackPanel>
-            </StackPanel>
-        </Button>
+            
+        </Button>-->
+
+        <xamlHost:WindowsXamlHost Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="30"
+                                  x:Name="Browse" ChildChanged="BrowseChildChanged" InitialTypeName="Windows.UI.Xaml.Controls.Button" />
+
+
         <!-- archive folder -->
         <Button Name="ArchiveFolder" Click="ArchiveFoldersOnClick" Margin="10,50,10,10">
             <StackPanel Orientation="Horizontal">
@@ -49,4 +56,4 @@
             </StackPanel>
         </Button>
     </Grid>
-</controls:MetroWindow>
+</mahAppsControls:MetroWindow>

@@ -7,8 +7,9 @@ namespace FolderArchiver.Core
     public class AppSettings : IAppSettings
     {
         private readonly IAppSettingsBase _appSettingsBase;
+
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="appSettingsBase"></param>
         public AppSettings(IAppSettingsBase appSettingsBase)
@@ -19,7 +20,7 @@ namespace FolderArchiver.Core
         /// <inheritdoc />
         public string InitialDirectory
         {
-            get => _appSettingsBase.Get<string>("InitialDirectory");
+            get => _appSettingsBase.Get("InitialDirectory", "");
             set => _appSettingsBase.Set("InitialDirectory", value);
         }
     }
