@@ -46,7 +46,7 @@ namespace FolderArchiver
             ArchiveFolder.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory);
 
             _initialDirectory = _appSettings.InitialDirectory;
-            InitialDirectory.Text = _initialDirectory;
+            InitialDirectory.Text = _initialDirectory ?? string.Empty;
         }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
