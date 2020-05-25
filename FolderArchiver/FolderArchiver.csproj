@@ -18,14 +18,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="4.3.0-alpha0107" />
-    <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0821" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.1.0" />
+    <PackageReference Include="ControlzEx" Version="4.3.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.0.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
     <PackageReference Include="EvilBaschdi.Core" Version="2020.5.3.1518" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2020.5.13.606-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2020.5.24.1338" />
     <PackageReference Include="Microsoft.Toolkit.Parsers" Version="7.0.0-preview1" />
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.XamlHost" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls" Version="6.1.0-preview1" />
+    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.XamlHost" Version="6.1.0-preview1" />
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />

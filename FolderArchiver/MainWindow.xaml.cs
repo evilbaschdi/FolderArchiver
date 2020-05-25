@@ -179,7 +179,7 @@ namespace FolderArchiver
                 var binding = new Binding
                               {
                                   Source = packIcon,
-                                  Converter = new PackIconMaterialKindToImageConverter()
+                                 // Converter = new PackIconMaterialKindToImageConverter()
                               };
 
                 //binding.ConverterParameter = FindResource("MahApps.Brushes.AccentBase");
