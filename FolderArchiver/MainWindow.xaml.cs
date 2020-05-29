@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Shell;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -18,6 +17,9 @@ using FolderArchiver.Properties;
 using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
 using MahApps.Metro.IconPacks.Converter;
+using Windows.UI.Xaml.Markup;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 namespace FolderArchiver
 {
@@ -166,28 +168,47 @@ namespace FolderArchiver
                 //xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 
 
-                var packIcon = new PackIconMaterial
-                               {
-                                   Kind = PackIconMaterialKind.CubeOutline
-                               };
+                // THIS will not work, because it is WPF in UWP in WPF control. 
 
-                var converter = new PackIconMaterialKindToImageConverter
-                                {
-                                    Brush = (SolidColorBrush) FindResource("MahApps.Brushes.AccentBase")
-                                };
+                //var packIcon = new PackIconMaterial
+                //               {
+                //                   Kind = PackIconMaterialKind.CubeOutline
+                //               };
 
-                var binding = new Binding
-                              {
-                                  Source = packIcon,
-                                 // Converter = new PackIconMaterialKindToImageConverter()
-                              };
+                //var converter = new PackIconMaterialKindToImageConverter
+                //                {
+                //                    Brush = (SolidColorBrush) FindResource("MahApps.Brushes.AccentBase")
+                //                };
 
-                //binding.ConverterParameter = FindResource("MahApps.Brushes.AccentBase");
+                //var binding = new Binding
+                //              {
+                //                  Source = packIcon,
+                //                 // Converter = new PackIconMaterialKindToImageConverter()
+                //              };
+
+                ////binding.ConverterParameter = FindResource("MahApps.Brushes.AccentBase");
 
 
-                var image = new Image();
-                image.SetBinding(Image.SourceProperty,binding );
+                //var image = new Image();
+                //image.SetBinding(Image.SourceProperty,binding );
                 
+
+
+                // SOULTION
+                // 1. We get the PathData as string which should be renderd
+                string pathData = new PackIconMaterial() { Kind = PackIconMaterialKind.CubeOutline }.Data;
+
+                // 2. We create the UWP Path which is needed to render
+                Geometry geometry = (Geometry)XamlBindingHelper.ConvertValue(typeof(Geometry), pathData);
+
+
+                // 3. Create the PathIcon and set the Foreground
+                System.Windows.Media.Color accentColor = (System.Windows.Media.Color)FindResource("MahApps.Colors.Accent");
+                PathIcon pathIcon = new PathIcon()
+                {
+                    Data = geometry,
+                    Foreground = new SolidColorBrush(Color.FromArgb(accentColor.A, accentColor.R, accentColor.G, accentColor.B))
+                };
 
 
                 var textBlock = new TextBlock
@@ -201,7 +222,7 @@ namespace FolderArchiver
                                  {
                                      Orientation = Orientation.Horizontal
                                  };
-                stackPanel.Children.Add(image);
+                stackPanel.Children.Add(pathIcon);
                 stackPanel.Children.Add(textBlock);
 
 
