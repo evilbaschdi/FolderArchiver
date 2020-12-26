@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -23,7 +26,6 @@ namespace FolderArchiver
     public partial class MainWindow : MetroWindow
     {
         private readonly IAppSettings _appSettings;
-
         private string _initialDirectory;
 
 
@@ -32,7 +34,6 @@ namespace FolderArchiver
         {
             InitializeComponent();
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-
             IApplicationStyle applicationStyle = new ApplicationStyle();
             applicationStyle.Load(true);
 
@@ -43,7 +44,8 @@ namespace FolderArchiver
 
         private void Load()
         {
-            ArchiveFolder.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory);
+            ArchiveFolder.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) &&
+                                      Directory.Exists(_appSettings.InitialDirectory);
 
             _initialDirectory = _appSettings.InitialDirectory;
             InitialDirectory.Text = _initialDirectory ?? string.Empty;
@@ -64,6 +66,7 @@ namespace FolderArchiver
         {
             await RunArchiveFoldersAsync();
         }
+
 
         private async Task RunArchiveFoldersAsync()
         {
@@ -94,23 +97,30 @@ namespace FolderArchiver
                     continue;
                 }
 
-                var createTime = File.GetCreationTime(path);
-                var directory = path.Replace(fileName, string.Empty);
-                var archiveTime = $@"{createTime.Year}\{createTime.Month.ToString().PadLeft(2, '0')}";
-                var archiveDirectory = $@"{directory}\{archiveTime}";
+                var fileDate = FileDate(path);
+                var archiveTime = $@"{fileDate.Year}\{fileDate.Month.ToString().PadLeft(2, '0')}";
+                var archiveDirectory = $@"{_initialDirectory}\{archiveTime}";
                 var archiveFilename = $@"{archiveDirectory}\{fileName}";
-                //debug
-                if (path.Contains(archiveTime))
-                {
-                    continue;
-                }
+
 
                 if (!Directory.Exists(archiveDirectory))
                 {
                     Directory.CreateDirectory(archiveDirectory);
                 }
 
-                File.Move(path, archiveFilename);
+                if (!path.Equals(archiveFilename) && !File.Exists(archiveFilename))
+                {
+                    try
+                    {
+                        File.Move(path, archiveFilename);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                }
+
+
                 counter++;
             }
 
@@ -137,7 +147,8 @@ namespace FolderArchiver
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
             var assembly = typeof(MainWindow).Assembly;
-            IAboutContent aboutWindowContent = new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
+            IAboutContent aboutWindowContent =
+                new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
 
             var aboutWindow = new AboutWindow
                               {
@@ -145,6 +156,61 @@ namespace FolderArchiver
                               };
 
             aboutWindow.ShowDialog();
+        }
+
+        private DateTime FileDate(string path)
+        {
+            var dateOfRecording = GetExtendedProperty(path, 12);
+            var mediumCreated = GetExtendedProperty(path, 208);
+
+            var dateTime = File.GetCreationTime(path);
+
+            var extendedProperty = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(dateOfRecording))
+            {
+                extendedProperty = dateOfRecording;
+            }
+
+            if (!string.IsNullOrWhiteSpace(mediumCreated))
+            {
+                extendedProperty = mediumCreated;
+            }
+
+            if (!string.IsNullOrWhiteSpace(extendedProperty))
+            {
+                var cultureInfo = CultureInfo.CurrentCulture;
+                var clean = new string(extendedProperty.Where(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c) || char.IsWhiteSpace(c)).ToArray());
+                return DateTime.Parse(clean.Trim(), cultureInfo);
+            }
+
+            return dateTime;
+        }
+
+        private string GetExtendedProperty(string filePath, int property)
+        {
+            var directory = Path.GetDirectoryName(filePath);
+            var shellAppType = Type.GetTypeFromProgID("Shell.Application");
+            if (shellAppType is null)
+            {
+                return string.Empty;
+            }
+
+            dynamic shellApp = Activator.CreateInstance(shellAppType);
+            if (shellApp == null)
+            {
+                return string.Empty;
+            }
+
+            var shellFolder = shellApp.NameSpace(directory);
+            var fileName = Path.GetFileName(filePath);
+            var folderItem = shellFolder.ParseName(fileName);
+
+            var value = shellFolder.GetDetailsOf(folderItem, property);
+
+            Marshal.ReleaseComObject(shellApp);
+            Marshal.ReleaseComObject(shellFolder);
+            return value;
         }
     }
 }

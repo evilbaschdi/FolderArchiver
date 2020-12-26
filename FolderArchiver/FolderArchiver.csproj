@@ -1,10 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\b.ico</ApplicationIcon>
     <Authors>Sebastian Walter</Authors>
@@ -18,11 +16,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="4.3.0" />
-    <PackageReference Include="MahApps.Metro" Version="2.0.0" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2020.5.3.1518" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2020.5.24.1338" />
+    <PackageReference Include="ControlzEx" Version="4.4.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.3" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.8.0" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2020.12.18.704-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2020.12.21.1342-develop" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
