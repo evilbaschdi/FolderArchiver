@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Core.Model;
 using EvilBaschdi.CoreExtended;
@@ -15,11 +16,6 @@ using EvilBaschdi.CoreExtended.Controls.About;
 using FolderArchiver.Core;
 using FolderArchiver.Properties;
 using MahApps.Metro.Controls;
-using MahApps.Metro.IconPacks;
-using MahApps.Metro.IconPacks.Converter;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
-using Windows.UI;
 
 namespace FolderArchiver
 {
@@ -48,10 +44,11 @@ namespace FolderArchiver
 
         private void Load()
         {
-            ArchiveFolder.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory);
+            ArchiveFolder.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) &&
+                                      Directory.Exists(_appSettings.InitialDirectory);
 
             _initialDirectory = _appSettings.InitialDirectory;
-            InitialDirectory.Text = _initialDirectory;
+            InitialDirectory.Text = _initialDirectory ?? string.Empty;
         }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
@@ -100,30 +97,29 @@ namespace FolderArchiver
                     continue;
                 }
 
-                var createTime = File.GetCreationTime(path);
-                var directory = path.Replace(fileName, string.Empty);
-                var archiveTime = $@"{createTime.Year}\{createTime.Month.ToString().PadLeft(2, '0')}";
-                var archiveDirectory = $@"{directory}\{archiveTime}";
+                var fileDate = FileDate(path);
+                var archiveTime = $@"{fileDate.Year}\{fileDate.Month.ToString().PadLeft(2, '0')}";
+                var archiveDirectory = $@"{_initialDirectory}\{archiveTime}";
                 var archiveFilename = $@"{archiveDirectory}\{fileName}";
-                //debug
-                if (path.Contains(archiveTime))
-                {
-                    continue;
-                }
+
 
                 if (!Directory.Exists(archiveDirectory))
                 {
                     Directory.CreateDirectory(archiveDirectory);
                 }
 
-                try
+                if (!path.Equals(archiveFilename) && !File.Exists(archiveFilename))
                 {
-                    File.Move(path, archiveFilename);
+                    try
+                    {
+                        File.Move(path, archiveFilename);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
+
 
                 counter++;
             }
@@ -148,102 +144,11 @@ namespace FolderArchiver
             Load();
         }
 
-        private void BrowseChildChanged(object sender, EventArgs e)
-        {
-            if (Browse.Child is Button button)
-            {
-                /*
-            
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="FolderOutline" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="browse" />
-                </StackPanel>
-
-
-                ImageSource="{Binding Source={x:Static iconPacks:PackIconMaterialKind.CubeOutline}, Converter={iconPackConverter:PackIconMaterialImageSourceConverter}, ConverterParameter={StaticResource TextBrush}}"
-                        Click="ThumbButtonInfoBrowseClick" />
-            
-                 */
-
-                //xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-
-
-                // THIS will not work, because it is WPF in UWP in WPF control. 
-
-                //var packIcon = new PackIconMaterial
-                //               {
-                //                   Kind = PackIconMaterialKind.CubeOutline
-                //               };
-
-                //var converter = new PackIconMaterialKindToImageConverter
-                //                {
-                //                    Brush = (SolidColorBrush) FindResource("MahApps.Brushes.AccentBase")
-                //                };
-
-                //var binding = new Binding
-                //              {
-                //                  Source = packIcon,
-                //                 // Converter = new PackIconMaterialKindToImageConverter()
-                //              };
-
-                ////binding.ConverterParameter = FindResource("MahApps.Brushes.AccentBase");
-
-
-                //var image = new Image();
-                //image.SetBinding(Image.SourceProperty,binding );
-                
-
-
-                // SOULTION
-                // 1. We get the PathData as string which should be renderd
-                string pathData = new PackIconMaterial() { Kind = PackIconMaterialKind.CubeOutline }.Data;
-
-                // 2. We create the UWP Path which is needed to render
-                Geometry geometry = (Geometry)XamlBindingHelper.ConvertValue(typeof(Geometry), pathData);
-
-
-                // 3. Create the PathIcon and set the Foreground
-                System.Windows.Media.Color accentColor = (System.Windows.Media.Color)FindResource("MahApps.Colors.Accent");
-                PathIcon pathIcon = new PathIcon()
-                {
-                    Data = geometry,
-                    Foreground = new SolidColorBrush(Color.FromArgb(accentColor.A, accentColor.R, accentColor.G, accentColor.B))
-                };
-
-
-                var textBlock = new TextBlock
-                                {
-                                    Margin = new Windows.UI.Xaml.Thickness(5, 0, 0, 0),
-                                    VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
-                                    Text = "browse"
-                                };
-
-                var stackPanel = new StackPanel
-                                 {
-                                     Orientation = Orientation.Horizontal
-                                 };
-                stackPanel.Children.Add(pathIcon);
-                stackPanel.Children.Add(textBlock);
-
-
-                button.Content = stackPanel;
-                button.Click += (s, args) =>
-                                {
-                                    var browser = new ExplorerFolderBrowser
-                                                  {
-                                                      SelectedPath = _initialDirectory
-                                                  };
-                                    browser.ShowDialog();
-                                    _appSettings.InitialDirectory = browser.SelectedPath;
-                                    Load();
-                                };
-            }
-        }
-
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
             var assembly = typeof(MainWindow).Assembly;
-            IAboutContent aboutWindowContent = new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
+            IAboutContent aboutWindowContent =
+                new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\Resources\b.png");
 
             var aboutWindow = new AboutWindow
                               {
@@ -251,6 +156,61 @@ namespace FolderArchiver
                               };
 
             aboutWindow.ShowDialog();
+        }
+
+        private DateTime FileDate(string path)
+        {
+            var dateOfRecording = GetExtendedProperty(path, 12);
+            var mediumCreated = GetExtendedProperty(path, 208);
+
+            var dateTime = File.GetCreationTime(path);
+
+            var extendedProperty = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(dateOfRecording))
+            {
+                extendedProperty = dateOfRecording;
+            }
+
+            if (!string.IsNullOrWhiteSpace(mediumCreated))
+            {
+                extendedProperty = mediumCreated;
+            }
+
+            if (!string.IsNullOrWhiteSpace(extendedProperty))
+            {
+                var cultureInfo = CultureInfo.CurrentCulture;
+                var clean = new string(extendedProperty.Where(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c) || char.IsWhiteSpace(c)).ToArray());
+                return DateTime.Parse(clean.Trim(), cultureInfo);
+            }
+
+            return dateTime;
+        }
+
+        private string GetExtendedProperty(string filePath, int property)
+        {
+            var directory = Path.GetDirectoryName(filePath);
+            var shellAppType = Type.GetTypeFromProgID("Shell.Application");
+            if (shellAppType is null)
+            {
+                return string.Empty;
+            }
+
+            dynamic shellApp = Activator.CreateInstance(shellAppType);
+            if (shellApp == null)
+            {
+                return string.Empty;
+            }
+
+            var shellFolder = shellApp.NameSpace(directory);
+            var fileName = Path.GetFileName(filePath);
+            var folderItem = shellFolder.ParseName(fileName);
+
+            var value = shellFolder.GetDetailsOf(folderItem, property);
+
+            Marshal.ReleaseComObject(shellApp);
+            Marshal.ReleaseComObject(shellFolder);
+            return value;
         }
     }
 }

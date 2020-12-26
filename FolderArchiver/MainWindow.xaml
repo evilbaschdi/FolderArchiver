@@ -5,8 +5,6 @@
                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                              xmlns:mahAppsControls="http://metro.mahapps.com/winfx/xaml/controls"
                              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                             xmlns:xamlHost="clr-namespace:Microsoft.Toolkit.Wpf.UI.XamlHost;assembly=Microsoft.Toolkit.Wpf.UI.XamlHost"
-                             xmlns:controls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls"
                              Icon="Resources/b.ico"
                              mc:Ignorable="d" ResizeMode="CanMinimize" GlowBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                              Title="FolderArchiver" Height="250" Width="500" TitleCharacterCasing="Normal">
@@ -33,19 +31,14 @@
         <TextBox x:Name="InitialDirectory" Height="30" Margin="50,10,115,0" VerticalAlignment="Top"
                  LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />
         <!-- ReSharper disable once UnusedMember.Global -->
-        <!--<Button Name="Browse2" Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+        <Button Name="Browse2" Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                 Click="BrowseClick">
-            
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="FolderOutline" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="browse" />
-                </StackPanel>
-            
-        </Button>-->
 
-        <xamlHost:WindowsXamlHost Width="100" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="30"
-                                  x:Name="Browse" ChildChanged="BrowseChildChanged" InitialTypeName="Windows.UI.Xaml.Controls.Button" />
-
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="FolderOutline" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="browse" />
+            </StackPanel>
+        </Button>
 
         <!-- archive folder -->
         <Button Name="ArchiveFolder" Click="ArchiveFoldersOnClick" Margin="10,50,10,10">

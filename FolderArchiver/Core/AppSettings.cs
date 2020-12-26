@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using EvilBaschdi.CoreExtended.AppHelpers;
 
 namespace FolderArchiver.Core
@@ -20,7 +21,7 @@ namespace FolderArchiver.Core
         /// <inheritdoc />
         public string InitialDirectory
         {
-            get => _appSettingsBase.Get("InitialDirectory", "");
+            get => _appSettingsBase.Get("InitialDirectory", Path.GetTempPath());
             set => _appSettingsBase.Set("InitialDirectory", value);
         }
     }
