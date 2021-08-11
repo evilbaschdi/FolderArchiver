@@ -158,7 +158,7 @@ namespace FolderArchiver
             aboutWindow.ShowDialog();
         }
 
-        private DateTime FileDate(string path)
+        private static DateTime FileDate(string path)
         {
             var dateOfRecording = GetExtendedProperty(path, 12);
             var mediumCreated = GetExtendedProperty(path, 208);
@@ -177,17 +177,17 @@ namespace FolderArchiver
                 extendedProperty = mediumCreated;
             }
 
-            if (!string.IsNullOrWhiteSpace(extendedProperty))
+            if (string.IsNullOrWhiteSpace(extendedProperty))
             {
-                var cultureInfo = CultureInfo.CurrentCulture;
-                var clean = new string(extendedProperty.Where(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c) || char.IsWhiteSpace(c)).ToArray());
-                return DateTime.Parse(clean.Trim(), cultureInfo);
+                return dateTime;
             }
 
-            return dateTime;
+            var cultureInfo = CultureInfo.CurrentCulture;
+            var clean = new string(extendedProperty.Where(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c) || char.IsWhiteSpace(c)).ToArray());
+            return DateTime.Parse(clean.Trim(), cultureInfo);
         }
 
-        private string GetExtendedProperty(string filePath, int property)
+        private static string GetExtendedProperty(string filePath, int property)
         {
             var directory = Path.GetDirectoryName(filePath);
             var shellAppType = Type.GetTypeFromProgID("Shell.Application");

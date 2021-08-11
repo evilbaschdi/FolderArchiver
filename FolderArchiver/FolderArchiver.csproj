@@ -12,16 +12,15 @@
     <PackageIconUrl>https://github.com/evilbaschdi/FolderArchiver/blob/master/FolderArchiver/Resources/b.ico</PackageIconUrl>
     <Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))-develop</Version>
     <Copyright>Copyright © 2016 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="4.4.0" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.3" />
+    <PackageReference Include="ControlzEx" Version="5.0.1" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
     <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.8.0" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2020.12.18.704-develop" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2020.12.21.1342-develop" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.0" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2021.7.12.1538-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2021.6.7.1723-develop" />
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
