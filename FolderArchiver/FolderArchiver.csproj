@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\b.ico</ApplicationIcon>
     <Authors>Sebastian Walter</Authors>
@@ -12,15 +12,15 @@
     <PackageIconUrl>https://github.com/evilbaschdi/FolderArchiver/blob/master/FolderArchiver/Resources/b.ico</PackageIconUrl>
     <Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))-develop</Version>
     <Copyright>Copyright © 2016 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
-    <LangVersion>9</LangVersion>
+    <LangVersion>preview</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.7" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.8.0" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2021.7.12.1538-develop" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2021.6.7.1723-develop" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.10.0" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2021.10.11.609-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2021.9.28.1631-develop" />
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />

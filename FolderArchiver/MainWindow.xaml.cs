@@ -27,6 +27,7 @@ namespace FolderArchiver
     {
         private readonly IAppSettings _appSettings;
         private string _initialDirectory;
+        private readonly IRoundCorners _roundCorners;
 
 
         /// <inheritdoc />
@@ -34,8 +35,9 @@ namespace FolderArchiver
         {
             InitializeComponent();
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            IApplicationStyle applicationStyle = new ApplicationStyle();
-            applicationStyle.Load(true);
+            _roundCorners = new RoundCorners();
+            IApplicationStyle style = new ApplicationStyle(_roundCorners, true);
+            style.Run();
 
             _appSettings = new AppSettings(appSettingsBase);
 
@@ -152,7 +154,7 @@ namespace FolderArchiver
 
             var aboutWindow = new AboutWindow
                               {
-                                  DataContext = new AboutViewModel(aboutWindowContent)
+                                  DataContext = new AboutViewModel(aboutWindowContent, _roundCorners)
                               };
 
             aboutWindow.ShowDialog();
