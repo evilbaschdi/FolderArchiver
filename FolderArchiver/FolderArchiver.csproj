@@ -26,8 +26,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
-		<PackageReference Include="EvilBaschdi.CoreExtended" Version="2023.1.24.1707-develop" />
-		<PackageReference Include="EvilBaschdi.Settings" Version="2023.1.10.1647-develop" />
+		<PackageReference Include="EvilBaschdi.CoreExtended" Version="2023.2.1.1955-develop" />
+		<PackageReference Include="EvilBaschdi.Settings" Version="2023.2.1.1923-develop" />
 		<PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
