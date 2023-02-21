@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net7.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon>Resources\b.ico</ApplicationIcon>
 		<Authors>Sebastian Walter</Authors>
@@ -26,8 +26,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
-		<PackageReference Include="EvilBaschdi.CoreExtended" Version="2023.2.1.1955-develop" />
-		<PackageReference Include="EvilBaschdi.Settings" Version="2023.2.1.1923-develop" />
+		<PackageReference Include="EvilBaschdi.Core.Wpf" Version="2023.2.20.2127-develop" />
+		<PackageReference Include="EvilBaschdi.About.Wpf" Version="2023.2.19.836-develop" />
+		<PackageReference Include="EvilBaschdi.Settings" Version="2023.2.21.1756" />
 		<PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

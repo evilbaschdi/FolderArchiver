@@ -8,8 +8,8 @@ using EvilBaschdi.About.Core;
 using EvilBaschdi.About.Core.Models;
 using EvilBaschdi.About.Wpf;
 using EvilBaschdi.Core.Internal;
-using EvilBaschdi.CoreExtended;
-using EvilBaschdi.CoreExtended.Browsers;
+using EvilBaschdi.Core.Wpf;
+using EvilBaschdi.Core.Wpf.Browsers;
 using EvilBaschdi.Settings.ByMachineAndUser;
 using FolderArchiver.Settings;
 using MahApps.Metro.Controls;
@@ -144,8 +144,9 @@ public partial class MainWindow : MetroWindow
     {
         ICurrentAssembly currentAssembly = new CurrentAssembly();
         IAboutContent aboutContent = new AboutContent(currentAssembly);
-        IAboutModel aboutModel = new AboutViewModel(aboutContent);
-        var aboutWindow = new AboutWindow(aboutModel);
+        IAboutViewModel aboutModel = new AboutViewModel(aboutContent);
+        IApplyMicaBrush applyMicaBrush = new ApplyMicaBrush();
+        var aboutWindow = new AboutWindow(aboutModel, applyMicaBrush);
 
         aboutWindow.ShowDialog();
     }
