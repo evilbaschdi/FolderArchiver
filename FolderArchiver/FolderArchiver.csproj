@@ -2,17 +2,17 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon>Resources\b.ico</ApplicationIcon>
 		<Authors>Sebastian Walter</Authors>
 		<Company>evilbaschdi (Sebastian Walter)</Company>
 		<!-- ReSharper disable once UnknownProperty -->
-		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
 		<PackageProjectUrl>https://github.com/evilbaschdi/FolderArchiver</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/evilbaschdi/FolderArchiver</RepositoryUrl>
 		<PackageIconUrl>https://github.com/evilbaschdi/FolderArchiver/blob/master/FolderArchiver/Resources/b.ico</PackageIconUrl>
-		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))-develop</Version>
+		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.H))-develop</Version>
 		<Copyright>Copyright © 2016 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
 		<LangVersion>preview</LangVersion>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -25,13 +25,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="EvilBaschdi.Core" />
 		<PackageReference Include="MahApps.Metro.IconPacks.Material" />
 		<PackageReference Include="EvilBaschdi.Core.Wpf" />
 		<PackageReference Include="EvilBaschdi.About.Wpf" />
-		<PackageReference Include="EvilBaschdi.Settings" />
+		<PackageReference Include="EvilBaschdi.Core.Settings" />
 		<PackageReference Include="WpfAnalyzers">
 			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
@@ -41,9 +42,6 @@
 		</None>
 		<Resource Include="Resources\b.ico" />
 		<Content Include="about.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="FolderArchiver.VisualElementsManifest.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

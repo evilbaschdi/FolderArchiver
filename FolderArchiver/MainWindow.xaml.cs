@@ -8,9 +8,9 @@ using EvilBaschdi.About.Core;
 using EvilBaschdi.About.Core.Models;
 using EvilBaschdi.About.Wpf;
 using EvilBaschdi.Core.Internal;
+using EvilBaschdi.Core.Settings.ByMachineAndUser;
 using EvilBaschdi.Core.Wpf;
 using EvilBaschdi.Core.Wpf.Browsers;
-using EvilBaschdi.Settings.ByMachineAndUser;
 using FolderArchiver.Settings;
 using MahApps.Metro.Controls;
 

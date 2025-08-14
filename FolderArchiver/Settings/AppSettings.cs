@@ -1,4 +1,4 @@
-﻿using EvilBaschdi.Settings.ByMachineAndUser;
+﻿using EvilBaschdi.Core.Settings.ByMachineAndUser;
 
 namespace FolderArchiver.Settings;
 
