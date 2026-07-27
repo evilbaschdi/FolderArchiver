@@ -1,9 +1,9 @@
-﻿using EvilBaschdi.Core.Settings.ByMachineAndUser;
+using EvilBaschdi.Core.Settings.ByMachineAndUser;
 
 namespace FolderArchiver.Settings;
 
 /// <inheritdoc />
-public class AppSettings : IAppSettings
+public class InitialDirectoryFromSettings : IInitialDirectoryFromSettings
 {
     private const string Key = "InitialDirectory";
     private readonly IAppSettingByKey _appSettingByKey;
@@ -13,13 +13,13 @@ public class AppSettings : IAppSettings
     /// </summary>
     /// <param name="appSettingByKey"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public AppSettings([NotNull] IAppSettingByKey appSettingByKey)
+    public InitialDirectoryFromSettings(IAppSettingByKey appSettingByKey)
     {
         _appSettingByKey = appSettingByKey ?? throw new ArgumentNullException(nameof(appSettingByKey));
     }
 
-    /// <inheritdoc />
-    public string InitialDirectory
+    /// <inheritdoc cref="string" />
+    public string Value
     {
         get => _appSettingByKey.ValueFor(Key);
         set => _appSettingByKey.RunFor(Key, value);

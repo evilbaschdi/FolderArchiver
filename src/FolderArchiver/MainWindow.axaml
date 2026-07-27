@@ -1,0 +1,60 @@
+<!-- ReSharper disable once Xaml.PathError -->
+<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+                       xmlns:viewModels="clr-namespace:FolderArchiver.ViewModels"
+                       xmlns:about="clr-namespace:EvilBaschdi.About.Avalonia;assembly=EvilBaschdi.About.Avalonia"
+                       xmlns:evilBaschdi="clr-namespace:EvilBaschdi.Core.Avalonia.Controls;assembly=EvilBaschdi.Core.Avalonia"
+                       x:Class="FolderArchiver.MainWindow"
+                       x:DataType="viewModels:MainWindowViewModel"
+                       mc:Ignorable="d"
+                       Width="500"
+                       Height="250"
+                       Title="FolderArchiver"
+                       CanResize="False"
+                       ShowAsDialog="True">
+
+    <Panel Name="RootPanel">
+        <evilBaschdi:TitleBarControl Icon="/Assets/b.ico" Name="TitleBarControl" />
+
+        <Panel Name="MainPanel" Margin="0,30,0,7">
+            <Grid RowDefinitions="*,46">
+                <Panel Grid.Row="0" Name="ContentPanel">
+                    <Label Width="35" Margin="7,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
+                    <TextBox x:Name="InitialDirectory"
+                             Margin="50,7,115,0"
+                             VerticalAlignment="Top"
+                             LostFocus="InitialDirectoryOnLostFocus"
+                             VerticalContentAlignment="Center" />
+
+                    <Button Name="Browse"
+                            Margin="0,7,7,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Click="BrowseClick"
+                            Width="100"
+                            Height="32">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center" Text="browse" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="ArchiveFolderButton"
+                            Command="{Binding ArchiveFolderCommand}"
+                            Margin="7,47,7,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="ArchiveFolderContent"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding ArchiveFolderContentText}" />
+                        </StackPanel>
+                    </Button>
+                </Panel>
+                <about:AboutFooter Grid.Row="1" />
+            </Grid>
+        </Panel>
+    </Panel>
+</windowing:FAAppWindow>

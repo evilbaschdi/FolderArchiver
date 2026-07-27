@@ -1,49 +1,49 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<TargetFramework>net10.0-windows</TargetFramework>
-		<UseWPF>true</UseWPF>
-		<ApplicationIcon>Resources\b.ico</ApplicationIcon>
+		<TargetFramework>net10.0</TargetFramework>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationIcon>Assets\b.ico</ApplicationIcon>
 		<Authors>Sebastian Walter</Authors>
 		<Company>evilbaschdi (Sebastian Walter)</Company>
 		<!-- ReSharper disable once UnknownProperty -->
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
 		<PackageProjectUrl>https://github.com/evilbaschdi/FolderArchiver</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/evilbaschdi/FolderArchiver</RepositoryUrl>
-		<PackageIconUrl>https://github.com/evilbaschdi/FolderArchiver/blob/master/FolderArchiver/Resources/b.ico</PackageIconUrl>
+		<PackageIconUrl>https://github.com/evilbaschdi/FolderArchiver/blob/master/FolderArchiver/Assets/b.ico</PackageIconUrl>
 		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.H))-develop</Version>
 		<Copyright>Copyright © 2016 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
 		<LangVersion>preview</LangVersion>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<TrimMode>copyused</TrimMode>
+		<AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Using Include="EvilBaschdi.Core" />
-		<Using Include="JetBrains.Annotations" />
+		<TrimmableAssembly Include="Avalonia.Themes.Fluent" />
+		<TrimmableAssembly Include="Avalonia.Themes.Default" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="EvilBaschdi.About.Avalonia" />
 		<PackageReference Include="EvilBaschdi.Core" />
-		<PackageReference Include="MahApps.Metro.IconPacks.Material" />
-		<PackageReference Include="EvilBaschdi.Core.Wpf" />
-		<PackageReference Include="EvilBaschdi.About.Wpf" />
+		<PackageReference Include="EvilBaschdi.Core.Avalonia" />
 		<PackageReference Include="EvilBaschdi.Core.Settings" />
-		<PackageReference Include="WpfAnalyzers">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="AvaloniaUI.DiagnosticsSupport" Condition="'$(Configuration)' == 'Debug'" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+		<Content Include="Assets\about.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="Settings\App.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<Resource Include="Resources\b.ico" />
-		<Content Include="about.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 	</ItemGroup>
 
 </Project>
