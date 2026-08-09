@@ -13,20 +13,20 @@ Default by NuGet.config is myget.org
 
 ## Quality & Activity
 
-| Branch                         | Code Quality                                                       | Commit Activity                                        | Last Commit                                    |
-| :----------------------------- | :----------------------------------------------------------------- | :----------------------------------------------------- | :--------------------------------------------- |
-| ![Main][mainBranchBadge]       | [![CodeFactor][codeFactorMainBadge]][codeFactorMainOverview]       | ![Commit Activity Main][commitActivityMainBadge]       | ![Last Commit Main][lastCommitMainBadge]       |
-| ![Develop][developBranchBadge] | [![CodeFactor][codeFactorDevelopBadge]][codeFactorDevelopOverview] | ![Commit Activity Develop][commitActivityDevelopBadge] | ![Last Commit Develop][lastCommitDevelopBadge] |
+| Branch                                | Status & Activity                                                                                                                                                        |
+| :------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Branch Main][mainBranchBadge]       | [![CodeFactor][codeFactorMainBadge]][codeFactorMainOverview] ![Commit Activity Main][commitActivityMainBadge] ![Last Commit Main][lastCommitMainBadge]                   |
+| ![Branch Develop][developBranchBadge] | [![CodeFactor][codeFactorDevelopBadge]][codeFactorDevelopOverview] ![Commit Activity Develop][commitActivityDevelopBadge] ![Last Commit Develop][lastCommitDevelopBadge] |
 
 [mainBranchBadge]: https://img.shields.io/badge/branch-main-brightgreen?style=for-the-badge&logo=git&logoColor=white&color=c9ff00
-[developBranchBadge]: https://img.shields.io/badge/branch-develop-orange?style=for-the-badge&logo=git&logoColor=white&color=0080ff
+[developBranchBadge]: https://img.shields.io/badge/branch-develop-blue?style=for-the-badge&logo=git&logoColor=white&color=0080ff
+
 [codeFactorMainBadge]: https://www.codefactor.io/repository/github/evilbaschdi/FolderArchiver/badge/main?style=for-the-badge
 [codeFactorMainOverview]: https://www.codefactor.io/repository/github/evilbaschdi/FolderArchiver/overview/main
-[codeFactorDevelopBadge]: https://www.codefactor.io/repository/github/evilbaschdi/FolderArchiver/badge/develop?style=for-the-badge
-[codeFactorDevelopOverview]: https://www.codefactor.io/repository/github/evilbaschdi/FolderArchiver/overview/develop
-[myGetBadge]: https://img.shields.io/badge/MyGet.org-gray?style=for-the-badge&logo=myget
-[codebergBadge]: https://img.shields.io/badge/Codeberg-gray?style=for-the-badge&logo=codeberg
 [commitActivityMainBadge]: https://img.shields.io/github/commit-activity/m/evilbaschdi/FolderArchiver/main?style=for-the-badge
 [lastCommitMainBadge]: https://img.shields.io/github/last-commit/evilbaschdi/FolderArchiver/main?style=for-the-badge
+
+[codeFactorDevelopBadge]: https://www.codefactor.io/repository/github/evilbaschdi/FolderArchiver/badge/develop?style=for-the-badge
+[codeFactorDevelopOverview]: https://www.codefactor.io/repository/github/evilbaschdi/FolderArchiver/overview/develop
 [commitActivityDevelopBadge]: https://img.shields.io/github/commit-activity/m/evilbaschdi/FolderArchiver/develop?style=for-the-badge
 [lastCommitDevelopBadge]: https://img.shields.io/github/last-commit/evilbaschdi/FolderArchiver/develop?style=for-the-badge
