@@ -86,12 +86,12 @@ public class ArchiveFolders : IArchiveFolders
 
         var extendedProperty = string.Empty;
 
-        if (!string.IsNullOrWhiteSpace(mediumCreated))
+        if (!string.IsNullOrWhiteSpace(mediumCreated) && DateTime.TryParse(mediumCreated, out _))
         {
             extendedProperty = mediumCreated;
         }
 
-        if (!string.IsNullOrWhiteSpace(dateOfRecording))
+        if (!string.IsNullOrWhiteSpace(dateOfRecording) && DateTime.TryParse(dateOfRecording, out _))
         {
             extendedProperty = dateOfRecording;
         }
