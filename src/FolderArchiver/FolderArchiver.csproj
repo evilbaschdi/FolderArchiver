@@ -11,6 +11,7 @@
 		<PackageProjectUrl>https://github.com/evilbaschdi/FolderArchiver</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/evilbaschdi/FolderArchiver</RepositoryUrl>
 		<PackageIconUrl>https://github.com/evilbaschdi/FolderArchiver/blob/master/FolderArchiver/Assets/b.ico</PackageIconUrl>
+		<PublishSingleFile>true</PublishSingleFile>
 		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.H))-develop</Version>
 		<Copyright>Copyright © 2016 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
 		<LangVersion>preview</LangVersion>
