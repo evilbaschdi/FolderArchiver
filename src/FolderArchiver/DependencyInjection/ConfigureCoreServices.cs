@@ -1,7 +1,7 @@
 using EvilBaschdi.Core.Settings.ByMachineAndUser;
-using Microsoft.Extensions.DependencyInjection;
 using FolderArchiver.Internal;
 using FolderArchiver.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FolderArchiver.DependencyInjection;
 

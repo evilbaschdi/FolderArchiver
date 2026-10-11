@@ -2,10 +2,10 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using EvilBaschdi.About.Avalonia;
 using EvilBaschdi.Core.Avalonia.DependencyInjection;
+using FolderArchiver.Internal;
 using JetBrains.Annotations;
 using ReactiveUI;
 using ReactiveUI.Primitives;
-using FolderArchiver.Internal;
 
 namespace FolderArchiver.ViewModels;
 

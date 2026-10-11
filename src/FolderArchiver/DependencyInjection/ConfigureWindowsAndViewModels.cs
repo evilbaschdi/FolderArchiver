@@ -1,7 +1,7 @@
 using EvilBaschdi.About.Avalonia;
 using EvilBaschdi.About.Avalonia.Models;
-using Microsoft.Extensions.DependencyInjection;
 using FolderArchiver.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FolderArchiver.DependencyInjection;
 
